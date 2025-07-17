@@ -1,5 +1,7 @@
 const userService = require('./userService');
 
+const passport = require('passport');
+
 exports.createUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -46,4 +48,16 @@ exports.deleteUser = async (req, res) => {
     console.error('Error deleting user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
+};
+
+exports.loginUser = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.status(401).json({ message: info.message || 'Invalid credentials' });
+
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({ message: 'Logged in', user });
+    });
+  })(req, res, next);
 };

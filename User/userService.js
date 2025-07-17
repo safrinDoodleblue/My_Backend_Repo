@@ -1,11 +1,16 @@
  const {User} = require('./userModel');
+ const bcrypt = require('bcryptjs');
+
 
 exports.createUser = async ({ username, email, password }) => {
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
     throw new Error('Email already registered');
   }
-  const newUser = await User.create({ username, email, password });
+
+  const hashedPassword = await bcrypt.hash(password, 10); 
+
+  const newUser = await User.create({ username, email, password: hashedPassword });
   return newUser;
 };
 
@@ -29,4 +34,19 @@ exports.deleteUser = async (id) => {
   }
   await user.destroy();
   return user;
+};
+
+
+exports.verifyUser = async (email, password) => {
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    return { user: null, message: 'Incorrect email' };
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return { user: null, message: 'Incorrect password' };
+  }
+
+  return { user };
 };

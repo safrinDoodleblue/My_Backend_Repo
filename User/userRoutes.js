@@ -10,6 +10,7 @@ router.post('/user/create',validate(createUserSchema),userController.createUser)
 router.get('/user/getAll',userController.getAllUsers);
 router.put('/user/:id',validate(userIdSchema,'params'),validate(updateUserSchema,'body'),userController.updateUser);
 router.delete('/user/:id',validate(userIdSchema,'params'),userController.deleteUser);
+router.post('/user/login', userController.loginUser);
 
 module.exports = router;
 
