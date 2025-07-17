@@ -1,19 +1,22 @@
 const express=require('express');
 require('dotenv').config();
-const sequelize=require('./models');
-const userRoutes=require('./routes/userRoutes');
+const sequelize=require('./models'); 
+const userRoutes=require('./User/userRoutes');
 
-const app=express();
-app.use(express.json());
+const app=express(); 
 
-app.use('/api',userRoutes);
+app.use(express.json()); 
+
+
+app.use('/api',userRoutes); 
 
 const PORT=process.env.PORT || 3000;
+ 
 
 (async()=>{
     try {
-        await sequelize.authenticate();
-        await sequelize.sync();
+        await sequelize.authenticate(); 
+        await sequelize.sync(); 
         console.log("DB connected");
         
         app.listen(PORT,()=>{
@@ -24,4 +27,6 @@ const PORT=process.env.PORT || 3000;
         console.error('Unable to connect to the database:', error);
     }
 })();
+
+
 
