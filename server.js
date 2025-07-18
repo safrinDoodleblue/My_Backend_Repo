@@ -11,22 +11,22 @@ const app=express();
 
 app.use(express.json()); 
 
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET, 
-    resave: false, 
-    saveUninitialized: false,
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET, 
+//     resave: false, 
+//     saveUninitialized: false,
+//   })
+// );
 
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use('/api',userRoutes); 
 const PORT=process.env.PORT || 3000;
  
+// const secret = process.env.JWT_SECRET;
 
 (async()=>{
     try {

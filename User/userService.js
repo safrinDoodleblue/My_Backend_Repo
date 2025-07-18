@@ -1,4 +1,5 @@
- const {User} = require('./userModel');
+ const { where } = require('sequelize');
+const {User} = require('./userModel');
  const bcrypt = require('bcryptjs');
 
 
@@ -18,6 +19,13 @@ exports.getAllUsers = async () => {
   return await User.findAll();
 };
 
+exports.getUserByEmail=async (email) => {
+  return await User.findOne({where:{email}});
+}
+
+exports.getUserById=async (id) => {
+  return await User.findByPk(id);
+}
 exports.updateUser = async (id, updateData) => {
   const user = await User.findByPk(id);
   if (!user) {
@@ -37,16 +45,3 @@ exports.deleteUser = async (id) => {
 };
 
 
-exports.verifyUser = async (email, password) => {
-  const user = await User.findOne({ where: { email } });
-  if (!user) {
-    return { user: null, message: 'Incorrect email' };
-  }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    return { user: null, message: 'Incorrect password' };
-  }
-
-  return { user };
-};
